@@ -5,12 +5,22 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import com.example.ejerciciociclodevida.databinding.ActivityMainBinding
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
     // Esto hay que crearlo siempre
     lateinit var binding: ActivityMainBinding
     var contador = 1
+
+    var listaPersonas = mutableListOf(
+        Persona("Carlos", 33, 0.0, 1.70),
+        Persona("Pedrito", 23, 1.0, 1.60),
+        Persona("Jaimito", 99, 2.0, 1.90),
+        Persona("Juanito", 22, 3.0, 1.50),
+        Persona("Rodolfo", 43, 4.0, 1.20),
+    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +40,9 @@ class MainActivity : AppCompatActivity() {
         }
         */
         binding.tvText.text = "Texto Modificado usando el binding"
-
-
         Log.w("Carlos", "onCreate ${contador++}")
+
+        mostrarListaPersonas()
 
     }
 
@@ -69,5 +79,23 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    fun mostrarListaPersonas(){
+
+        val opcion = Random.nextInt(0,4)
+        when(opcion) {
+            0 -> listaPersonas.sortBy { it.nombre }
+            1 -> listaPersonas . sortBy { it.edad }
+            2 -> listaPersonas . sortByDescending { it.nombre }
+            3 -> listaPersonas . sortByDescending { it.altura }
+            else -> Log.e("Carlos", "Se ha recibido una opción inesperada, opcion = $opcion")
+        }
+        binding.tvText.text = listaPersonas.toString()
+    }
+
+    data class Persona(var nombre : String, var edad : Int, var notaMedia : Double, var altura : Double) {
+        override fun toString(): String {
+            return "\nMi nombre es $nombre, mi edad es $edad, mi nota media es $notaMedia y mido $altura\n"
+        }
+    }
 
 }
